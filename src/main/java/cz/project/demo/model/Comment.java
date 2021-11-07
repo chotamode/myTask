@@ -25,6 +25,8 @@ public class Comment {
     @Basic(optional = false)
     @Column(nullable = false)
     String comment;
+    @Basic(optional = false)
+    @Column(nullable = false, name = "date")
     Date date;
 
     @ManyToOne(optional = false)

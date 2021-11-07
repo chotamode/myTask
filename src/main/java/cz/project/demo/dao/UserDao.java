@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 
 @Repository
-public class UserDao extends BaseDao{
+public class UserDao extends BaseDao<User>{
 
     public UserDao() {
         super(User.class);

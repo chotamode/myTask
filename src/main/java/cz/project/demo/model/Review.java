@@ -7,24 +7,28 @@ import java.util.Date;
 
 @Entity
 public class Review {
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    String review;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    Date date;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    Integer stars;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name="user_id", nullable = false)
+    private User owner;
+    @Id
     private Long id;
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    @Id
     public Long getId() {
         return id;
     }
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-    String review;
-    Date date;
-    Integer stars;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name="user_id", nullable = false)
-    private User owner;
 }

@@ -10,13 +10,24 @@ import java.util.Date;
 public class Message {
 
     @Id
-    private String id;
     private String chatId;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String senderId;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String recipientId;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String senderName;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String recipientName;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String content;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private Date timestamp;
 
     @Enumerated

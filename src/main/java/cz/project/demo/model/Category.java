@@ -1,9 +1,7 @@
 package cz.project.demo.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Category {
@@ -28,4 +26,5 @@ public class Category {
                 "name='" + name + '\'' +
                 "}";
     }
+
 }

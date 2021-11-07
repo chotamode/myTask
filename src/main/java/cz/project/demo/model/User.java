@@ -19,12 +19,17 @@ public class User {
     @Basic(optional = false)
     @Column(nullable = false)
     private String firstName;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String lastName;
     @Column(nullable = false, unique = true)
     private String username;
     @Basic(optional = false)
     @Column(nullable = false)
     private String password;
+
+    @OneToMany
+    List<Task> tasks;
 
 //    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 //    private List<Address> address;
@@ -38,7 +43,9 @@ public class User {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     List<Message> messages;*/
 
-    @Id
+    @Id()
+    @Column(insertable = false, updatable = false)
+    @GeneratedValue
     private Long id;
 
     @Enumerated(EnumType.STRING)

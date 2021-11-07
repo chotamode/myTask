@@ -19,6 +19,8 @@ public class AcceptanceMessage {
     @Basic(optional = false)
     @Column(nullable = false)
     private String message;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private Integer price;
 
     @ManyToOne(optional = false)

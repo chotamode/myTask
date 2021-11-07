@@ -21,10 +21,20 @@ public class Address {
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer streetNumber;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String streetName;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String suburb;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String city;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String state;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private Integer postcode;
 
 }
