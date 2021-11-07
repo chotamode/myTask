@@ -1,5 +1,13 @@
 package cz.project.demo.dao;
 
+import cz.project.demo.model.AcceptanceMessage;
+import org.springframework.stereotype.Repository;
 
-public class AcceptanceMessageDao {
+@Repository
+public class AcceptanceMessageDao extends  BaseDao{
+
+
+    public AcceptanceMessageDao() {
+        super(AcceptanceMessage.class);
+    }
 }

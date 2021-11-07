@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Task.findAllTasksByAuthor", query = "SELECT t FROM Task t WHERE t.owner = :owner")
+})
 public class Task {
     private Long id;
 

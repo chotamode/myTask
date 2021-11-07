@@ -1,4 +1,9 @@
 package cz.project.demo.dao;
 
-public class CategoryDao {
+import cz.project.demo.model.Category;
+
+public class CategoryDao extends BaseDao{
+    public CategoryDao() {
+        super(Category.class);
+    }
 }
