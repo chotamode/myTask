@@ -1,8 +1,13 @@
 package cz.project.demo.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 public class AcceptanceMessage {
 
     private Long id;
@@ -23,7 +28,7 @@ public class AcceptanceMessage {
     @Column(nullable = false)
     private Integer price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name="user_id")
-    User author;
+//    @ManyToOne(optional = false)
+//    @JoinColumn(name="user_id")
+//    User author;
 }

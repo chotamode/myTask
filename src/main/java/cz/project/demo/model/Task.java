@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Task.findAllTasksByAuthor", query = "SELECT t FROM Task t WHERE t.owner = :owner"),
-        @NamedQuery(name = "Task.findByCategory", query = "SELECT t from Task t WHERE :category MEMBER OF t.categories AND NOT t.removed")
+//        @NamedQuery(name = "Task.findByCategory", query = "SELECT t from Task t WHERE :category MEMBER OF t.categories AND NOT t.removed")
 })
 @Getter
 @Setter
@@ -44,7 +44,7 @@ public class Task {
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<Comment>();
 
-    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
+    @ManyToMany
     private List<Category> categories;
 
     @OneToOne(optional = false)

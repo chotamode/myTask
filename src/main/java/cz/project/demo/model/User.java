@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "USER_ENTITY")
+@Table(name = "user_entity")
 @Getter
 @Setter
 @NamedQueries({
@@ -44,10 +44,12 @@ public class User {
     List<Message> messages;*/
 
     @Id()
-    @Column(insertable = false, updatable = false)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+//    @OneToMany(mappedBy = "user_entity")
+//    private List<Comment> comments;
 }
