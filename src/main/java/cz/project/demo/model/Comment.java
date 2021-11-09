@@ -15,25 +15,19 @@ import java.util.Date;
 @Getter
 @Setter
 public class Comment {
-    private Long id;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Id
-    public Long getId() {
-        return id;
-    }
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Basic(optional = false)
     @Column(nullable = false)
     String comment;
     @Basic(optional = false)
     @Column(nullable = false, name = "date")
+    @Temporal(TemporalType.TIMESTAMP)
     Date date;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="user_entity_id")
-//    private User author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private User author;
 }

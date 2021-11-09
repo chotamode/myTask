@@ -9,17 +9,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class AcceptanceMessage {
-
-    private Long id;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Id
-    public Long getId() {
-        return id;
-    }
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Basic(optional = false)
     @Column(nullable = false)

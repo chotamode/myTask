@@ -2,6 +2,8 @@ package cz.project.demo.service;
 
 import cz.project.demo.dao.UserDao;
 import cz.project.demo.environment.Generator;
+import cz.project.demo.model.Address;
+import cz.project.demo.model.Review;
 import cz.project.demo.model.Role;
 import cz.project.demo.model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +34,7 @@ public class UserServiceTest {
     public void persistCreatesTaskForRegularUser() {
         final User user = Generator.generateUser();
         user.setRole(Role.USER);
-        user.addTask(Generator.generateTask(user));
+        user.addTask(Generator.generateTask(user, new Review(), new Address()));
         sut.persist(user);
 
         final ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
@@ -44,7 +46,7 @@ public class UserServiceTest {
     public void persistCreatesCartForGuestUser() {
         final User user = Generator.generateUser();
         user.setRole(Role.GUEST);
-        user.addTask(Generator.generateTask(user));
+        user.addTask(Generator.generateTask(user, new Review(), new Address()));
         sut.persist(user);
 
         final ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);

@@ -11,16 +11,10 @@ import java.util.List;
 @Setter
 public class Category {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Id
-    public Long getId() {
-        return id;
-    }
     @Basic(optional = false)
     @Column(nullable = false)
     private String name;

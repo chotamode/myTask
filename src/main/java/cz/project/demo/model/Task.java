@@ -22,7 +22,7 @@ public class Task {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User owner;
 
-    @OneToOne(optional = false)
+    @OneToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User performer;
 
@@ -48,7 +48,7 @@ public class Task {
     @ManyToMany
     private List<Category> categories;
 
-    @OneToOne(optional = false)
+    @OneToOne
     private Review review;
 
     @OneToOne(optional = false)
@@ -61,6 +61,7 @@ public class Task {
     private List<AcceptanceMessage> acceptanceMessages;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     public void addComment(Comment comment){

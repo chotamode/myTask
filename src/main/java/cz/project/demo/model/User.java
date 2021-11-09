@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,7 +14,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NamedQueries({
-        @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username")
+        @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.nickname = :nickname")
 })
 public class User {
 
@@ -27,7 +28,7 @@ public class User {
 
     @Basic(optional = false)
     @Column(nullable = false, unique = true)
-    private String username;
+    private String nickname;
 
     @Basic(optional = false)
     @Column(nullable = false)
@@ -39,7 +40,7 @@ public class User {
 
 
     @OneToMany
-    List<Task> tasks;
+    List<Task> tasks = new ArrayList<Task>();
 
     public void addTask(Task task){
         Objects.requireNonNull(task);
@@ -77,7 +78,7 @@ public class User {
     public String toString() {
         return "User{" +
                 firstName + " " + lastName +
-                "(" + username + ")}";
+                "(" + nickname + ")}";
     }
 
 }

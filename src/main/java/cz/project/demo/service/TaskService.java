@@ -14,8 +14,6 @@ public class TaskService {
 
     private final TaskDao dao;
 
-    private Task task = new Task();
-
     @Autowired
     public TaskService(TaskDao dao) {
         this.dao = dao;
@@ -26,10 +24,10 @@ public class TaskService {
         return dao.findAll();
     }
 
-    @Transactional(readOnly = true)
+/*    @Transactional(readOnly = true)
     public List<Task> findAll(Category category) {
         return dao.findAll(category);
-    }
+    }*/
 
     @Transactional(readOnly = true)
     public Task find(Integer id) {
@@ -66,8 +64,8 @@ public class TaskService {
         Objects.requireNonNull(task);
         Objects.requireNonNull(review);
         task.setCompleted(true);
+        task.setReview(review);
         dao.update(task);
     }
-
 
 }

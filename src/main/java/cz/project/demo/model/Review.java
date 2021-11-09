@@ -13,26 +13,23 @@ import java.util.Date;
 public class Review {
 
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column
     String review;
+
     @Basic(optional = false)
-    @Column(nullable = false)
-    Date date;
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    Date date = new Date();
+
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column
     Integer stars;
 
     @ManyToOne(optional = false)
     @JoinColumn(name="user_id", nullable = false)
     private User owner;
+
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }

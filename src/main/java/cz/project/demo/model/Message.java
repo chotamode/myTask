@@ -14,6 +14,7 @@ import java.util.Date;
 public class Message {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String chatId;
     @Basic(optional = false)
     @Column(nullable = false)
@@ -32,6 +33,7 @@ public class Message {
     private String content;
     @Basic(optional = false)
     @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
     @Enumerated
