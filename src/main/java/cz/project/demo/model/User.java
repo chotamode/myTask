@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -19,17 +20,36 @@ public class User {
     @Basic(optional = false)
     @Column(nullable = false)
     private String firstName;
+
     @Basic(optional = false)
     @Column(nullable = false)
     private String lastName;
+
+    @Basic(optional = false)
     @Column(nullable = false, unique = true)
     private String username;
+
     @Basic(optional = false)
     @Column(nullable = false)
     private String password;
 
+    public User() {
+        this.role = Role.GUEST;
+    }
+
+
     @OneToMany
     List<Task> tasks;
+
+    public void addTask(Task task){
+        Objects.requireNonNull(task);
+        tasks.add(task);
+    }
+
+    public void removeTask(Task task){
+        Objects.requireNonNull(task);
+        tasks.remove(task);
+    }
 
 //    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 //    private List<Address> address;
@@ -52,4 +72,12 @@ public class User {
 
 //    @OneToMany(mappedBy = "user_entity")
 //    private List<Comment> comments;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                firstName + " " + lastName +
+                "(" + username + ")}";
+    }
+
 }

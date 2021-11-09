@@ -1,10 +1,7 @@
 package cz.project.demo.service;
 
 import cz.project.demo.dao.TaskDao;
-import cz.project.demo.model.Category;
-import cz.project.demo.model.Comment;
-import cz.project.demo.model.Review;
-import cz.project.demo.model.Task;
+import cz.project.demo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +13,8 @@ import java.util.Objects;
 public class TaskService {
 
     private final TaskDao dao;
+
+    private Task task = new Task();
 
     @Autowired
     public TaskService(TaskDao dao) {
@@ -69,4 +68,6 @@ public class TaskService {
         task.setCompleted(true);
         dao.update(task);
     }
+
+
 }

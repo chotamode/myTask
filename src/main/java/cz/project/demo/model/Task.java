@@ -17,6 +17,7 @@ import java.util.List;
 @Setter
 public class Task {
 
+
     @OneToOne(optional = false)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User owner;
@@ -81,4 +82,5 @@ public class Task {
     public Long getId() {
         return id;
     }
+
 }
