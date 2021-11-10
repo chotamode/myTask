@@ -1,4 +1,32 @@
 package cz.project.demo.dao;
 
-public class TaskDao {
+import cz.project.demo.model.Category;
+import cz.project.demo.model.Task;
+import cz.project.demo.model.User;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.NoResultException;
+import java.util.List;
+import java.util.Objects;
+
+@Repository
+public class TaskDao extends BaseDao<Task>{
+
+    public TaskDao() {
+        super(Task.class);
+    }
+
+    public List<Task> findAllTasksByAuthor(User author) {
+        try {
+            return em.createNamedQuery("Task.findAllTasksByAuthor", Task.class).setParameter("owner", author)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+/*    public List<Task> findAll(Category category){
+        Objects.requireNonNull(category);
+        return em.createNamedQuery("Task.findByCategory", Task.class).setParameter("category", category).getResultList();
+    }*/
 }

@@ -1,23 +1,20 @@
 package cz.project.demo.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class Category {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Id
-    public Long getId() {
-        return id;
-    }
     @Basic(optional = false)
     @Column(nullable = false)
     private String name;
@@ -28,4 +25,5 @@ public class Category {
                 "name='" + name + '\'' +
                 "}";
     }
+
 }

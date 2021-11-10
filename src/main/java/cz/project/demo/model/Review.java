@@ -1,30 +1,35 @@
 package cz.project.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
 public class Review {
-    private Long id;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Id
-    public Long getId() {
-        return id;
-    }
 
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column
     String review;
-    Date date;
+
+    @Basic(optional = false)
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    Date date = new Date();
+
+    @Basic(optional = false)
+    @Column
     Integer stars;
 
     @ManyToOne(optional = false)
     @JoinColumn(name="user_id", nullable = false)
     private User owner;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 }

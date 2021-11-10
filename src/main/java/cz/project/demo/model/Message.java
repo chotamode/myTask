@@ -2,21 +2,38 @@ package cz.project.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.Nullable;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
 public class Message {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String chatId;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String senderId;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String recipientId;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String senderName;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String recipientName;
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String content;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
     @Enumerated
