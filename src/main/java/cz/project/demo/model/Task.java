@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,13 +18,16 @@ import java.util.List;
 @Setter
 public class Task {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @OneToOne(optional = false)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "owner_id")
     private User owner;
 
     @OneToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "performer_id")
     private User performer;
 
     @Basic(optional = false)
@@ -42,17 +46,43 @@ public class Task {
     @Column(nullable = false)
     private boolean completed;
 
+    @Basic
+    @Column
+    private Integer streetNumber;
+    @Basic
+    @Column
+    private String streetName;
+    @Basic
+    @Column
+    private String suburb;
+    @Basic
+    @Column
+    private String city;
+    @Basic
+    @Column
+    private String state;
+    @Basic
+    @Column
+    private Integer postcode;
+
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<Comment>();
 
     @ManyToMany
     private List<Category> categories;
 
-    @OneToOne
-    private Review review;
+    @Basic
+    @Column
+    String review;
 
-    @OneToOne(optional = false)
-    private Address address;
+    @Basic(optional = false)
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    Date date = new Date();
+
+    @Basic
+    @Column
+    Integer stars;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -60,9 +90,11 @@ public class Task {
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<AcceptanceMessage> acceptanceMessages;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    public void setReview(String review, Date date, Integer stars){
+        this.review = review;
+        this.date = date;
+        this.stars = stars;
+    }
 
     public void addComment(Comment comment){
         comments.add(comment);
@@ -74,14 +106,6 @@ public class Task {
 
     public void removeCategory(Category category) {
         categories.remove(category);
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
     }
 
 }

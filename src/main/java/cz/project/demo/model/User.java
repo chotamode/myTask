@@ -18,12 +18,20 @@ import java.util.Objects;
 })
 public class User {
 
-    @Basic(optional = false)
-    @Column(nullable = false)
+    @Id()
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    public User() {
+        this.role = Role.GUEST;
+    }
+
+    @Basic
+    @Column
     private String firstName;
 
-    @Basic(optional = false)
-    @Column(nullable = false)
+    @Basic
+    @Column
     private String lastName;
 
     @Basic(optional = false)
@@ -34,13 +42,31 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    public User() {
-        this.role = Role.GUEST;
-    }
-
+    @Basic
+    @Column
+    private Integer streetNumber;
+    @Basic
+    @Column
+    private String streetName;
+    @Basic
+    @Column
+    private String suburb;
+    @Basic
+    @Column
+    private String city;
+    @Basic
+    @Column
+    private String state;
+    @Basic
+    @Column
+    private Integer postcode;
 
     @OneToMany
     List<Task> tasks = new ArrayList<Task>();
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
 
     public void addTask(Task task){
         Objects.requireNonNull(task);
@@ -52,6 +78,12 @@ public class User {
         tasks.remove(task);
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                firstName + " " + lastName +
+                "(" + nickname + ")}";
+    }
 //    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 //    private List<Address> address;
     /*
@@ -64,21 +96,13 @@ public class User {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     List<Message> messages;*/
 
-    @Id()
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+
+
 
 //    @OneToMany(mappedBy = "user_entity")
 //    private List<Comment> comments;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                firstName + " " + lastName +
-                "(" + nickname + ")}";
-    }
+
 
 }
