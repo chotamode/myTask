@@ -78,7 +78,7 @@ public class Task {
     @Basic(optional = false)
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    Date date = new Date();
+    protected Date date = new Date();
 
     @Basic
     @Column
