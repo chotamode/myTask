@@ -32,26 +32,16 @@ public class Generator {
         return user;
     }
 
-    public static Task generateTask(User user, Review review, Address address) {
+    public static Task generateTask(User user) {
         final Task t = new Task();
         t.setOwner(user);
         t.setTask("Task" + randomInt());
         t.setPrice(randomInt());
         t.setName("Some Name" + randomInt());
         t.setRemoved(false);
-        t.setAddress(address);
-        t.setReview(review);
         return t;
     }
 
-    public static Review generateReview(User user){
-        final Review r = new Review();
-        r.setStars(randomInt());
-        r.setReview("review" + randomInt());
-        r.setOwner(user);
-        r.setDate(new Date());
-        return r;
-    }
 
     public static Comment generateComment(User user){
         final Comment c = new Comment();

@@ -1,7 +1,5 @@
 package cz.project.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,22 +13,20 @@ public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String chatId;
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private String senderId;
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private String recipientId;
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private String senderName;
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private String recipientName;
+    private String id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private User receiver;
+
     @Basic(optional = false)
     @Column(nullable = false)
     private String content;
+
     @Basic(optional = false)
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -39,7 +35,4 @@ public class Message {
     @Enumerated
     private MessageStatus status;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name="user_id")
-    private User owner;
 }

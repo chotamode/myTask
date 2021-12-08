@@ -13,9 +13,10 @@ public class AcceptanceMessage {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Basic(optional = false)
-    @Column(nullable = false)
+    @Basic
+    @Column
     private String message;
+
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer price;

@@ -1,6 +1,5 @@
 package cz.project.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,10 +14,6 @@ import java.util.Date;
 @Getter
 @Setter
 public class Comment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
     @Basic(optional = false)
     @Column(nullable = false)
     String comment;
@@ -26,8 +21,10 @@ public class Comment {
     @Column(nullable = false, name = "date")
     @Temporal(TemporalType.TIMESTAMP)
     Date date;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User author;
 }

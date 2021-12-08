@@ -2,8 +2,6 @@ package cz.project.demo.dao;
 
 import cz.project.demo.MyTaskApplication;
 import cz.project.demo.environment.Generator;
-import cz.project.demo.model.Address;
-import cz.project.demo.model.Review;
 import cz.project.demo.model.Task;
 import cz.project.demo.model.User;
 import org.junit.Assert;
@@ -31,23 +29,13 @@ public class TaskDaoTest {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private ReviewDao reviewDao;
-
-    @Autowired
-    private AddressDao addressDao;
-
     @Test
     public void findAllByAuthor(){
         final User user = Generator.generateUser();
-        final Review review = Generator.generateReview(user);
-        Address address = new Address();
 
-        final Task task = Generator.generateTask(user, review, address);
+        final Task task = Generator.generateTask(user);
 
-        addressDao.persist(address);
         userDao.persist(user);
-        reviewDao.persist(review);
         sut.persist(task);
 
         Assert.assertEquals(task, sut.findAllTasksByAuthor(user).get(0));

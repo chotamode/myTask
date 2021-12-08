@@ -18,12 +18,17 @@ import java.util.Objects;
 })
 public class User {
 
-    @Basic(optional = false)
-    @Column(nullable = false)
+    @OneToMany
+    List<Task> tasks = new ArrayList<Task>();
+    @Id()
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Basic
+    @Column
     private String firstName;
 
-    @Basic(optional = false)
-    @Column(nullable = false)
+    @Basic
+    @Column
     private String lastName;
 
     @Basic(optional = false)
@@ -34,24 +39,47 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Basic
+    @Column
+    private Integer streetNumber;
+    @Basic
+    @Column
+    private String streetName;
+    @Basic
+    @Column
+    private String suburb;
+    @Basic
+    @Column
+    private String city;
+    @Basic
+    @Column
+    private String state;
+    @Basic
+    @Column
+    private Integer postcode;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     public User() {
         this.role = Role.GUEST;
     }
 
-
-    @OneToMany
-    List<Task> tasks = new ArrayList<Task>();
-
-    public void addTask(Task task){
+    public void addTask(Task task) {
         Objects.requireNonNull(task);
         tasks.add(task);
     }
 
-    public void removeTask(Task task){
+    public void removeTask(Task task) {
         Objects.requireNonNull(task);
         tasks.remove(task);
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                firstName + " " + lastName +
+                "(" + nickname + ")}";
+    }
 //    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 //    private List<Address> address;
     /*
@@ -64,21 +92,9 @@ public class User {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     List<Message> messages;*/
 
-    @Id()
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
 //    @OneToMany(mappedBy = "user_entity")
 //    private List<Comment> comments;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                firstName + " " + lastName +
-                "(" + nickname + ")}";
-    }
 
 }

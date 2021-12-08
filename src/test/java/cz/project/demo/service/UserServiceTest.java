@@ -2,8 +2,6 @@ package cz.project.demo.service;
 
 import cz.project.demo.dao.UserDao;
 import cz.project.demo.environment.Generator;
-import cz.project.demo.model.Address;
-import cz.project.demo.model.Review;
 import cz.project.demo.model.Role;
 import cz.project.demo.model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +28,7 @@ public class UserServiceTest {
         this.sut = new UserService(userDaoMock);
     }
 
+    /*
     @Test
     public void persistCreatesTaskForRegularUser() {
         final User user = Generator.generateUser();
@@ -40,8 +39,9 @@ public class UserServiceTest {
         final ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
         verify(userDaoMock).persist(captor.capture());
         assertNotNull(captor.getValue().getTasks());
-    }
+    }*/
 
+    /*
     @Test
     public void persistCreatesCartForGuestUser() {
         final User user = Generator.generateUser();
@@ -52,7 +52,7 @@ public class UserServiceTest {
         final ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
         verify(userDaoMock).persist(captor.capture());
         assertNotNull(captor.getValue().getTasks());
-    }
+    }*/
 
     @Test
     public void persistSetsUserRoleToDefaultWhenItIsNotSpecified() {
