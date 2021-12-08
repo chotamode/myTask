@@ -8,30 +8,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Objects;
 
 @Service
 
 public class UserService {
 
-    private final UserDao dao;
-
     final User currentUser = new User(); // singleton simulating logged-in user
+    private final UserDao dao;
 
     @Autowired
     public UserService(UserDao dao) {
         this.dao = dao;
     }
 
-    public void addTask(User user, Task toAdd){
+    public void addTask(User user, Task toAdd) {
         Objects.requireNonNull(toAdd);
         Objects.requireNonNull(user);
         user.addTask(toAdd);
         dao.update(user);
     }
 
-    public void removeTask(User user, Task toRemove){
+    public void removeTask(User user, Task toRemove) {
         Objects.requireNonNull(toRemove);
         Objects.requireNonNull(user);
         user.removeTask(toRemove);

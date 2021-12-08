@@ -5,10 +5,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.time.DayOfWeek;
 import java.time.Month;
-import java.time.LocalDateTime;
 
 @Entity
-public class TaskRepeatable extends Task{
+public class TaskRepeatable extends Task {
 
     @Basic(optional = false)
     @Column(nullable = false)

@@ -1,5 +1,7 @@
 package cz.project.demo.dao;
 
+import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -9,10 +11,10 @@ import java.util.Objects;
 
 public abstract class BaseDao<T> implements GenericDao<T> {
 
+    protected final Class<T> type;
+
     @PersistenceContext
     protected EntityManager em;
-
-    protected final Class<T> type;
 
     protected BaseDao(Class<T> type) {
         this.type = type;

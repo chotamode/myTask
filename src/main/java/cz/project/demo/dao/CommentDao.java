@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public class CommentDao extends BaseDao<Comment>{
+public class CommentDao extends BaseDao<Comment> {
 
     public CommentDao() {
         super(Comment.class);

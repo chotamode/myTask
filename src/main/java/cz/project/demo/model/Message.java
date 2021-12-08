@@ -1,7 +1,5 @@
 package cz.project.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,11 +16,11 @@ public class Message {
     private String id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="sender_id")
+    @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="receiver_id")
+    @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
     @Basic(optional = false)

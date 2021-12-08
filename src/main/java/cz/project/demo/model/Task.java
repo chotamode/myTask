@@ -1,6 +1,5 @@
 package cz.project.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,18 +17,25 @@ import java.util.List;
 @Setter
 public class Task {
 
+    @Basic(optional = false)
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    protected Date date = new Date();
+    @Basic
+    @Column
+    String review;
+    @Basic
+    @Column
+    Integer stars;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     @OneToOne(optional = false)
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
-
     @OneToOne
     @JoinColumn(name = "performer_id")
     private User performer;
-
     @Basic(optional = false)
     @Column(nullable = false)
     private String name;
@@ -45,7 +51,6 @@ public class Task {
     @Basic(optional = false)
     @Column(nullable = false)
     private boolean completed;
-
     @Basic
     @Column
     private Integer streetNumber;
@@ -64,43 +69,27 @@ public class Task {
     @Basic
     @Column
     private Integer postcode;
-
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<Comment>();
-
     @ManyToMany
     private List<Category> categories;
-
-    @Basic
-    @Column
-    String review;
-
-    @Basic(optional = false)
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    protected Date date = new Date();
-
-    @Basic
-    @Column
-    Integer stars;
-
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<AcceptanceMessage> acceptanceMessages;
 
-    public void setReview(String review, Date date, Integer stars){
+    public void setReview(String review, Date date, Integer stars) {
         this.review = review;
         this.date = date;
         this.stars = stars;
     }
 
-    public void addComment(Comment comment){
+    public void addComment(Comment comment) {
         comments.add(comment);
     }
 
-    public void addCategory(Category category){
+    public void addCategory(Category category) {
         categories.add(category);
     }
 

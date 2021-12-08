@@ -1,7 +1,8 @@
 package cz.project.demo.service;
 
 import cz.project.demo.dao.TaskDao;
-import cz.project.demo.model.*;
+import cz.project.demo.model.Comment;
+import cz.project.demo.model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +54,7 @@ public class TaskService {
     }
 
     @Transactional
-    public void addComment(Comment comment, Task task){
+    public void addComment(Comment comment, Task task) {
         Objects.requireNonNull(task);
         Objects.requireNonNull(comment);
         task.addComment(comment);
@@ -61,7 +62,7 @@ public class TaskService {
     }
 
     @Transactional
-    public void setCompleted(String review, Date date, Integer stars, Task task){
+    public void setCompleted(String review, Date date, Integer stars, Task task) {
         Objects.requireNonNull(task);
         Objects.requireNonNull(review);
         task.setCompleted(true);

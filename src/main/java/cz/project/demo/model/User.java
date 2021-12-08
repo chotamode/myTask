@@ -18,14 +18,11 @@ import java.util.Objects;
 })
 public class User {
 
+    @OneToMany
+    List<Task> tasks = new ArrayList<Task>();
     @Id()
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    public User() {
-        this.role = Role.GUEST;
-    }
-
     @Basic
     @Column
     private String firstName;
@@ -60,20 +57,19 @@ public class User {
     @Basic
     @Column
     private Integer postcode;
-
-    @OneToMany
-    List<Task> tasks = new ArrayList<Task>();
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    public User() {
+        this.role = Role.GUEST;
+    }
 
-    public void addTask(Task task){
+    public void addTask(Task task) {
         Objects.requireNonNull(task);
         tasks.add(task);
     }
 
-    public void removeTask(Task task){
+    public void removeTask(Task task) {
         Objects.requireNonNull(task);
         tasks.remove(task);
     }
@@ -97,12 +93,8 @@ public class User {
     List<Message> messages;*/
 
 
-
-
-
 //    @OneToMany(mappedBy = "user_entity")
 //    private List<Comment> comments;
-
 
 
 }
