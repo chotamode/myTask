@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -62,7 +63,7 @@ public class TaskService {
     }
 
     @Transactional
-    public void setCompleted(String review, Date date, Integer stars, Task task) {
+    public void setCompleted(String review, LocalDateTime date, Integer stars, Task task) {
         Objects.requireNonNull(task);
         Objects.requireNonNull(review);
         task.setCompleted(true);

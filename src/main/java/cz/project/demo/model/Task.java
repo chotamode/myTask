@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,19 +18,18 @@ import java.util.List;
 @Setter
 public class Task {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     @Basic(optional = false)
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    protected Date date = new Date();
+    protected LocalDateTime date;
     @Basic
     @Column
     String review;
     @Basic
     @Column
     Integer stars;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     @OneToOne(optional = false)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
@@ -79,7 +79,7 @@ public class Task {
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<AcceptanceMessage> acceptanceMessages;
 
-    public void setReview(String review, Date date, Integer stars) {
+    public void setReview(String review, LocalDateTime date, Integer stars) {
         this.review = review;
         this.date = date;
         this.stars = stars;

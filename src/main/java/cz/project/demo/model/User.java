@@ -64,6 +64,13 @@ public class User {
         this.role = Role.GUEST;
     }
 
+    public User(String firstName, String lastName, String nickname, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nickname = nickname;
+        this.password = password;
+    }
+
     public void addTask(Task task) {
         Objects.requireNonNull(task);
         tasks.add(task);
