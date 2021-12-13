@@ -24,10 +24,10 @@ public class Generator {
         final User user = new User();
         user.setFirstName("FirstName" + randomInt());
         user.setLastName("LastName" + randomInt());
-        user.setNickname("username" + randomInt() + "@kbss.felk.cvut.cz");
+        user.setUsername("username" + randomInt() + "@kbss.felk.cvut.cz");
         user.setPassword(Integer.toString(randomInt()));
         user.setTasks(tasks);
-        user.setRole(Role.GUEST);
+       // user.addRole(Role.GUEST);
 
         return user;
     }

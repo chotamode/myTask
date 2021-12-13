@@ -1,57 +1,64 @@
 package cz.project.demo.service;
 
 import cz.project.demo.dao.TaskDao;
+import cz.project.demo.dao.UserDao;
+import cz.project.demo.model.Category;
 import cz.project.demo.model.Comment;
 import cz.project.demo.model.Task;
+import cz.project.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 public class TaskService {
 
-    private final TaskDao dao;
+    private final UserDao userDao;
+    private final TaskDao taskDao;
 
     @Autowired
-    public TaskService(TaskDao dao) {
-        this.dao = dao;
+    public TaskService(TaskDao taskDao, UserDao userDao) {
+        this.userDao = userDao;
+        this.taskDao = taskDao;
     }
 
     @Transactional(readOnly = true)
     public List<Task> findAll() {
-        return dao.findAll();
+        return taskDao.findAll();
     }
 
-/*    @Transactional(readOnly = true)
-    public List<Task> findAll(Category category) {
-        return dao.findAll(category);
-    }*/
+    @Transactional(readOnly = true)
+    public List<Task> findAllByCategory(Category category) {
+        return taskDao.findAllByCategory(category);
+    }
 
     @Transactional(readOnly = true)
-    public Task find(Integer id) {
-        return dao.find(id);
+    public Task find(Long id) {
+        return taskDao.find(id);
     }
 
     @Transactional
     public void persist(Task task) {
-        dao.persist(task);
+        User user = task.getOwner();
+        user.addTask(task);
+        userDao.persist(user);
+        taskDao.persist(task);
     }
 
     @Transactional
     public void update(Task task) {
-        dao.update(task);
+        taskDao.update(task);
     }
 
     @Transactional
     public void remove(Task task) {
         Objects.requireNonNull(task);
         task.setRemoved(true);
-        dao.update(task);
+        taskDao.update(task);
     }
 
     @Transactional
@@ -59,7 +66,7 @@ public class TaskService {
         Objects.requireNonNull(task);
         Objects.requireNonNull(comment);
         task.addComment(comment);
-        dao.update(task);
+        taskDao.update(task);
     }
 
     @Transactional
@@ -68,7 +75,7 @@ public class TaskService {
         Objects.requireNonNull(review);
         task.setCompleted(true);
         task.setReview(review, date, stars);
-        dao.update(task);
+        taskDao.update(task);
     }
 
 }

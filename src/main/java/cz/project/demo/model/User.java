@@ -2,21 +2,22 @@ package cz.project.demo.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Entity
-@Table(name = "user_entity")
+@Table(name = "users")
 @Getter
 @Setter
 @NamedQueries({
-        @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.nickname = :nickname")
+        @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :nickname"),
+        @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
 })
-public class User {
+public class User implements UserDetails {
 
     @OneToMany
     List<Task> tasks = new ArrayList<Task>();
@@ -33,7 +34,7 @@ public class User {
 
     @Basic(optional = false)
     @Column(nullable = false, unique = true)
-    private String nickname;
+    private String username;
 
     @Basic(optional = false)
     @Column(nullable = false)
@@ -57,18 +58,37 @@ public class User {
     @Basic
     @Column
     private Integer postcode;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+
+    @ManyToMany
+    @JoinColumn
+    private List<Role> roles;
+
+    @Basic
+    @Column
+    private boolean nonExpired;
+    @Basic
+    @Column
+    private boolean nonLocked;
+    @Basic
+    @Column
+    private boolean credentialsNonExpired;
+    @Basic
+    @Column
+    private boolean Enabled;
 
     public User() {
-        this.role = Role.GUEST;
     }
 
     public User(String firstName, String lastName, String nickname, String password) {
+        this.roles = new ArrayList<Role>();
         this.firstName = firstName;
         this.lastName = lastName;
-        this.nickname = nickname;
+        this.username = nickname;
         this.password = password;
+        this.nonExpired = true;
+        this.nonLocked = true;
+        this.credentialsNonExpired = true;
+        this.Enabled = true;
     }
 
     public void addTask(Task task) {
@@ -81,11 +101,50 @@ public class User {
         tasks.remove(task);
     }
 
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 firstName + " " + lastName +
-                "(" + nickname + ")}";
+                "(" + username + ")}";
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<Authority> list = new ArrayList<>();
+        for (Role g:
+             roles) {
+            list.addAll(g.getAuthorities());
+        }
+        return list;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.nonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.nonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.Enabled;
     }
 //    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 //    private List<Address> address;

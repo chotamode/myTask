@@ -37,10 +37,11 @@ class TaskServiceTest {
     @InjectMocks
     private TaskService sut;
 
+    /*
     @BeforeEach
     public void setUp() {
         this.sut = new TaskService(taskDaoMock);
-    }
+    }*/
 
 /*
     @Test

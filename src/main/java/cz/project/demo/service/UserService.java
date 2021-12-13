@@ -5,21 +5,28 @@ import cz.project.demo.model.Role;
 import cz.project.demo.model.Task;
 import cz.project.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
+public class UserService implements UserDetailsService {
 
-public class UserService {
-
-    final User currentUser = new User(); // singleton simulating logged-in user
     private final UserDao dao;
 
+    final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserService(UserDao dao) {
+    public UserService(UserDao dao, PasswordEncoder passwordEncoder) {
         this.dao = dao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void addTask(User user, Task toAdd) {
@@ -39,9 +46,7 @@ public class UserService {
     @Transactional
     public void persist(User user) {
         Objects.requireNonNull(user);
-        if (user.getRole() == null) {
-            user.setRole(Role.USER);
-        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         dao.persist(user);
     }
 
@@ -50,9 +55,18 @@ public class UserService {
         return dao.findByUsername(username) != null;
     }
 
-    public User getCurrentUser() {
-        return currentUser;
+    @Transactional
+    public List<User> findAll(){
+        return dao.findAll();
     }
 
+    @Transactional
+    public User findByUsername(String username){
+        return dao.findByUsername(username);
+    }
 
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return dao.findByUsername(s);
+    }
 }

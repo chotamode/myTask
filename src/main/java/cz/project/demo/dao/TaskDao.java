@@ -1,5 +1,6 @@
 package cz.project.demo.dao;
 
+import cz.project.demo.model.Category;
 import cz.project.demo.model.Task;
 import cz.project.demo.model.User;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,14 @@ public class TaskDao extends BaseDao<Task> {
 
     public TaskDao() {
         super(Task.class);
+    }
+
+    public List<Task> findAllByCategory(Category category) {
+        try {
+            return em.createNamedQuery("Task.findByCategory", Task.class).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public List<Task> findAllTasksByAuthor(User author) {

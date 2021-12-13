@@ -22,11 +22,11 @@ public class UserServiceTest {
     private UserDao userDaoMock;
 
     private UserService sut;
-
+/*
     @BeforeEach
     public void setUp() {
         this.sut = new UserService(userDaoMock);
-    }
+    }*/
 
     /*
     @Test
@@ -53,7 +53,7 @@ public class UserServiceTest {
         verify(userDaoMock).persist(captor.capture());
         assertNotNull(captor.getValue().getTasks());
     }*/
-
+/*
     @Test
     public void persistSetsUserRoleToDefaultWhenItIsNotSpecified() {
         final User user = Generator.generateUser();
@@ -63,5 +63,5 @@ public class UserServiceTest {
         final ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
         verify(userDaoMock).persist(captor.capture());
         assertEquals(Role.USER, captor.getValue().getRole());
-    }
+    }*/
 }

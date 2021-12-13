@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Task.findAllTasksByAuthor", query = "SELECT t FROM Task t WHERE t.owner = :owner"),
-//        @NamedQuery(name = "Task.findByCategory", query = "SELECT t from Task t WHERE :category MEMBER OF t.categories AND NOT t.removed")
+        @NamedQuery(name = "Task.findByCategory", query = "SELECT t from Task t WHERE :category MEMBER OF t.categories AND NOT t.removed")
 })
 @Getter
 @Setter
@@ -24,13 +24,7 @@ public class Task {
     @Basic(optional = false)
     @Column
     protected LocalDateTime date;
-    @Basic
-    @Column
-    String review;
-    @Basic
-    @Column
-    Integer stars;
-    @OneToOne(optional = false)
+    @OneToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
     @OneToOne
@@ -47,10 +41,17 @@ public class Task {
     private Integer price;
     @Basic(optional = false)
     @Column(nullable = false)
-    private boolean removed;
+    private boolean removed = false;
     @Basic(optional = false)
     @Column(nullable = false)
-    private boolean completed;
+    private boolean completed = false;
+
+    @Basic
+    @Column
+    String review;
+    @Basic
+    @Column
+    Integer stars;
     @Basic
     @Column
     private Integer streetNumber;
