@@ -2,7 +2,6 @@ package cz.project.demo.rest;
 
 import cz.project.demo.model.User;
 import cz.project.demo.rest.utils.RestUtils;
-import cz.project.demo.security.model.AuthenticationToken;
 import cz.project.demo.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,13 +40,5 @@ public class UserController {
         final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/current");
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
-
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST')")
-    @GetMapping(value = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
-    public User getCurrent(Principal principal) {
-        final AuthenticationToken auth = (AuthenticationToken) principal;
-        return userService.findByUsername(auth.getPrincipal().getUsername());
-    }
-
 
 }

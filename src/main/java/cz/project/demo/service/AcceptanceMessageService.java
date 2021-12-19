@@ -19,4 +19,7 @@ public class AcceptanceMessageService {
         dao.persist(message);
     }
 
+    public AcceptanceMessage find(Long message_id) {
+        return dao.find(message_id);
+    }
 }

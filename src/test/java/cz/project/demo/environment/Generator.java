@@ -26,7 +26,6 @@ public class Generator {
         user.setLastName("LastName" + randomInt());
         user.setUsername("username" + randomInt() + "@kbss.felk.cvut.cz");
         user.setPassword(Integer.toString(randomInt()));
-        user.setTasks(tasks);
        // user.addRole(Role.GUEST);
 
         return user;
@@ -46,7 +45,7 @@ public class Generator {
     public static Comment generateComment(User user){
         final Comment c = new Comment();
         c.setComment("xd lmao!!!hehe");
-        c.setDate(new Date());
+        //c.setDate(new Date());
         c.setAuthor(user);
         return c;
     }

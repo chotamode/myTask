@@ -13,6 +13,10 @@ public class AcceptanceMessage {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
+
     @Basic
     @Column
     private String message;
@@ -21,7 +25,4 @@ public class AcceptanceMessage {
     @Column(nullable = false)
     private Integer price;
 
-//    @ManyToOne(optional = false)
-//    @JoinColumn(name="user_id")
-//    User author;
 }
