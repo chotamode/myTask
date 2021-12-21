@@ -19,7 +19,7 @@ public class CommentServiceTest {
 
     @BeforeEach
     public void setUp() {
-        this.sut = new CommentService(commentDaoMock);
+//        this.sut = new CommentService(commentDaoMock);
     }
 
 }

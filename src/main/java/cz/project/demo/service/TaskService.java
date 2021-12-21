@@ -9,7 +9,6 @@ import cz.project.demo.exception.TaskException;
 import cz.project.demo.model.AcceptanceMessage;
 import cz.project.demo.model.Category;
 import cz.project.demo.model.Task;
-import cz.project.demo.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -25,14 +25,14 @@ public class TaskService {
     private final TaskDao taskDao;
     private final AcceptanceMessageDao acceptanceMessageDao;
     private final UserDao userDao;
-    private final SecurityUtils securityUtils;
+    private final UserService userService;
 
     @Autowired
-    public TaskService(TaskDao taskDao, AcceptanceMessageDao acceptanceMessageDao, UserDao userDao, SecurityUtils securityUtils) {
+    public TaskService(TaskDao taskDao, AcceptanceMessageDao acceptanceMessageDao, UserDao userDao, UserService userService) {
         this.taskDao = taskDao;
         this.acceptanceMessageDao = acceptanceMessageDao;
         this.userDao = userDao;
-        this.securityUtils = securityUtils;
+        this.userService = userService;
     }
 
     @Transactional(readOnly = true)
@@ -56,8 +56,13 @@ public class TaskService {
     }
 
     @Transactional
-    public void update(Task task) {
+    public void updateTask(Task task) {
         taskDao.update(task);
+    }
+
+    @Transactional
+    public void deleteTask(Long id) {
+        taskDao.remove(taskDao.find(id));
     }
 
     @Transactional
@@ -74,7 +79,7 @@ public class TaskService {
 
         Objects.requireNonNull(task.getOwner());
 
-        if(!task.getOwner().getUsername().equals(securityUtils.getCurrentUser().getUsername())){
+        if(!task.getOwner().getUsername().equals(userService.getCurrentUsername())){
             throw new AuthorizationException("Only owner can see acceptanceMessages");
         }
 
@@ -88,7 +93,7 @@ public class TaskService {
 
         Objects.requireNonNull(task.getOwner());
 
-        if(!task.getOwner().getUsername().equals(securityUtils.getCurrentUser().getUsername())){
+        if(!task.getOwner().getUsername().equals(userService.getCurrentUsername())){
             throw new AuthorizationException("Only owner can see acceptanceMessages");
         }
 
@@ -114,7 +119,7 @@ public class TaskService {
     @Transactional
     public void sendAcceptanceMessage(AcceptanceMessage message, Long taskId){
         Task task = taskDao.find(taskId);
-        message.setSender(securityUtils.getCurrentUser());
+        message.setSender(userDao.findByUsername(userService.getCurrentUsername()));
 
         if(message.getSender() == task.getOwner()){
             throw new TaskException("message.getSender() == task.getOwner()");
@@ -125,25 +130,15 @@ public class TaskService {
 
     @Transactional
     public void createTask(Task task){
-        task.setOwner(userDao.findByUsername(getName()));
-//        task.setOwner(SecurityUtils.getCurrentUser());
+        task.setOwner(userDao.findByUsername(userService.getCurrentUsername()));
         taskDao.persist(task);
-    }
-
-    @Transactional
-    public String getName() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName();
-        return name;
     }
 
     @Transactional
     public void taskCompletedPerformer(Long taskId, String review, Integer performerStars){
         Task task = taskDao.find(taskId);
 
-        String username = securityUtils.getCurrentUser().getUsername();
-
-        if(task.getPerformer() == null|| !task.getPerformer().getUsername().equals(username)){
+        if(task.getPerformer() == null|| !task.getPerformer().getUsername().equals(userService.getCurrentUsername())){
             throw new AuthorizationException("Only owner or performer can do completion approval");
         }
 
@@ -156,9 +151,7 @@ public class TaskService {
     public void taskCompletedOwner(Long taskId, String review, Integer ownerStars){
         Task task = taskDao.find(taskId);
 
-        String username = securityUtils.getCurrentUser().getUsername();
-
-        if(!task.getOwner().getUsername().equals(username)){
+        if(!task.getOwner().getUsername().equals(userService.getCurrentUsername())){
             throw new AuthorizationException("Only owner or performer can do completion approval");
         }
 
@@ -166,4 +159,27 @@ public class TaskService {
         task.setOwnerStars(ownerStars);
         taskDao.update(task);
     }
+
+    @Transactional
+    public List<Task> getAllOthersTasks(){
+
+        return taskDao.findAll()
+                .stream()
+                .filter(t -> !t.getOwner().getUsername().equals(userService.getCurrentUsername()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<Task> getAllMyTasks(){
+        return taskDao.findAll()
+                .stream()
+                .filter(t -> t.getOwner().getUsername().equals(userService.getCurrentUsername()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public String role(){
+        return userDao.findByUsername(userService.getCurrentUsername()).getUsername();
+    }
+
 }

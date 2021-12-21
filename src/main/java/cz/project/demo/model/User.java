@@ -32,7 +32,7 @@ public class User{
     @Column
     private String lastName;
 
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -65,23 +65,6 @@ public class User{
     @JsonIgnore
     private List<Role> roles;
 
-    @Basic
-    @Column
-    @JsonIgnore
-    private boolean nonExpired;
-    @Basic
-    @Column
-    @JsonIgnore
-    private boolean nonLocked;
-    @Basic
-    @Column
-    @JsonIgnore
-    private boolean credentialsNonExpired;
-    @Basic
-    @Column
-    @JsonIgnore
-    private boolean Enabled;
-
     public User() {
     }
 
@@ -91,13 +74,7 @@ public class User{
         this.lastName = lastName;
         this.username = nickname;
         this.password = password;
-        this.nonExpired = true;
-        this.nonLocked = true;
-        this.credentialsNonExpired = true;
-        this.Enabled = true;
     }
-
-
 
     public void addRole(Role role) {
         this.roles.add(role);
@@ -118,4 +95,5 @@ public class User{
         }
         return list;
     }
+
 }

@@ -1,5 +1,6 @@
 package cz.project.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import cz.project.demo.exception.TaskException;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,11 +24,12 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Basic(optional = false)
-    @Column
+    @Basic
+    @Column(nullable = false)
     protected LocalDateTime created = LocalDateTime.now();
-    @Basic(optional = false)
-    @Column
+    @Basic
+    @Column(nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     protected LocalDateTime date;
 
     @OneToOne
@@ -37,24 +39,24 @@ public class Task {
     @JoinColumn(name = "performer_id")
     private User performer;
 
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     private String name;
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     private String task;
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     private Integer price;
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     private boolean removed = false;
 
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     private boolean ownerApprovedCompletion = false;
 
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     private boolean performerApprovedCompletion = false;
 
@@ -90,13 +92,13 @@ public class Task {
     @Column
     private Integer postcode;
 
-    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<Comment>();
 
     @ManyToMany
     private List<Category> categories;
 
-    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<AcceptanceMessage> acceptanceMessages;
 
     public void addAcceptanceMessage(AcceptanceMessage message){

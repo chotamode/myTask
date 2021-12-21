@@ -13,9 +13,6 @@ import java.util.List;
 @Entity
 public class Authority implements GrantedAuthority {
 
-    @ManyToOne
-    Role role;
-
     @Id
     private String id;
 

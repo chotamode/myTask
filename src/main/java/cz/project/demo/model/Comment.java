@@ -19,10 +19,10 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     String comment;
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     LocalDateTime date = LocalDateTime.now();
 
@@ -30,6 +30,6 @@ public class Comment {
     @JoinColumn(name = "author_id")
     private User author;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "task_id")
+    private Task task;
 }

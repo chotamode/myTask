@@ -16,7 +16,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/users")
+@RequestMapping("/users")
 public class UserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);

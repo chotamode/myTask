@@ -1,14 +1,10 @@
 package cz.project.demo.service;
 
 import cz.project.demo.dao.UserDao;
-import cz.project.demo.model.Role;
-import cz.project.demo.model.Task;
 import cz.project.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +18,11 @@ public class UserService{
     private final UserDao dao;
 
     final PasswordEncoder passwordEncoder;
+
+    public String getCurrentUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName();
+    }
 
     @Autowired
     public UserService(UserDao dao, PasswordEncoder passwordEncoder) {

@@ -5,7 +5,9 @@ import cz.project.demo.dao.TaskDao;
 import cz.project.demo.dao.UserDao;
 import cz.project.demo.exception.CommentException;
 import cz.project.demo.model.Comment;
-import cz.project.demo.security.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,28 +16,33 @@ import java.util.List;
 @Service
 public class CommentService {
 
-    private CommentDao commentDao;
-    private UserDao userDao;
-    private TaskDao taskDao;
-    private SecurityUtils securityUtils;
+    private final CommentDao commentDao;
+    private final UserDao userDao;
+    private final TaskDao taskDao;
+    private final UserService userService;
 
-    public CommentService(CommentDao commentDao) {
+    @Autowired
+    public CommentService(CommentDao commentDao, UserDao userDao, TaskDao taskDao, UserService userService) {
         this.commentDao = commentDao;
+        this.userDao = userDao;
+        this.taskDao = taskDao;
+        this.userService = userService;
     }
 
     @Transactional
-    public void createComment(String text, Long userId) {
+    public void createComment(String text, Long taskId) {
         Comment comment = new Comment();
         comment.setComment(text);
-        comment.setAuthor(securityUtils.getCurrentUser());
-        comment.setUser(userDao.find(userId));
+        comment.setAuthor(userDao.findByUsername(userService.getCurrentUsername()));
+        comment.setTask(taskDao.find(taskId));
+        taskDao.find(taskId).addComment(comment);
         commentDao.persist(comment);
     }
 
     @Transactional
     public void updateComment(Long comment_id, String text){
         Comment comment = commentDao.find(comment_id);
-        if(comment.getAuthor() == securityUtils.getCurrentUser()){
+        if(comment.getAuthor() == userDao.findByUsername(userService.getCurrentUsername())){
             comment.setComment(text);
             commentDao.update(comment);
         }else{
@@ -46,7 +53,8 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long comment_id){
         Comment comment = commentDao.find(comment_id);
-        if(comment.getAuthor() == securityUtils.getCurrentUser() || comment.getUser() == securityUtils.getCurrentUser()){
+        if(comment.getAuthor() == userDao.findByUsername(userService.getCurrentUsername()) ||
+                comment.getTask().getOwner() == userDao.findByUsername(userService.getCurrentUsername())){
             commentDao.remove(comment);
         }else{
             throw new CommentException("You are not allowed to delete this comment");
