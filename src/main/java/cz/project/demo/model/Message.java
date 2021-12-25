@@ -11,8 +11,9 @@ import java.util.Date;
 @Getter
 @Setter
 @NamedQueries({
-        @NamedQuery(name = "Message.findBySender", query = "SELECT m FROM Message m WHERE m.sender.username = :username"),
-        @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
+        @NamedQuery(name = "Message.findBySenderReceiver",
+                query = "SELECT m FROM Message m WHERE m.sender.username = :sender AND m.receiver.username = :receiver"),
+        @NamedQuery(name = "Message.findAll", query = "SELECT m FROM Message m WHERE m.receiver.username = :receiver")
 })
 public class Message {
 

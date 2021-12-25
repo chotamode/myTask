@@ -3,11 +3,12 @@ package cz.project.demo.rest;
 import cz.project.demo.model.AcceptanceMessage;
 import cz.project.demo.model.Comment;
 import cz.project.demo.model.Task;
-import cz.project.demo.rest.utils.RestUtils;
+import cz.project.demo.service.CategoryService;
 import cz.project.demo.service.CommentService;
 import cz.project.demo.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,11 +21,11 @@ import java.util.List;
 @RequestMapping("/tasks")
 public class TaskController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TaskController.class);
-
     private final TaskService taskService;
     private final CommentService commentService;
+    private CategoryService categoryService;
 
+    @Autowired
     public TaskController(TaskService taskService, CommentService commentService) {
         this.taskService = taskService;
         this.commentService = commentService;
@@ -35,9 +36,7 @@ public class TaskController {
 
         taskService.createTask(task);
 
-        LOG.debug("Created task {}.", task);
-        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", task.getId());
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 
@@ -141,5 +140,10 @@ public class TaskController {
                                                  @RequestBody String text) {
         commentService.updateComment(comment_id, text);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/category/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Task> getAllTasksByCategory(@PathVariable Long id) {
+        return taskService.findAllByCategory(categoryService.find(id));
     }
 }

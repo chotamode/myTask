@@ -24,6 +24,10 @@ public class UserService{
         return auth.getName();
     }
 
+    public User getCurrentUser() {
+        return dao.findByUsername(getCurrentUsername());
+    }
+
     @Autowired
     public UserService(UserDao dao, PasswordEncoder passwordEncoder) {
         this.dao = dao;

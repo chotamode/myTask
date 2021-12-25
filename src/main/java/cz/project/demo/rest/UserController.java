@@ -1,10 +1,10 @@
 package cz.project.demo.rest;
 
 import cz.project.demo.model.User;
-import cz.project.demo.rest.utils.RestUtils;
 import cz.project.demo.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -23,6 +22,7 @@ public class UserController {
 
     UserService userService;
 
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -37,8 +37,7 @@ public class UserController {
     public ResponseEntity<Void> register(@RequestBody User user) {
         userService.persist(user);
         LOG.debug("User {} successfully registered.", user);
-        final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/current");
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }
