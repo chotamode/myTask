@@ -9,6 +9,7 @@ import cz.project.demo.exception.TaskException;
 import cz.project.demo.model.AcceptanceMessage;
 import cz.project.demo.model.Category;
 import cz.project.demo.model.Task;
+import cz.project.demo.rest.RepeatMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -129,9 +130,34 @@ public class TaskService {
     }
 
     @Transactional
-    public void createTask(Task task){
+    public void createTask(Task task, RepeatMode repeatMode, Integer quantity){
         task.setOwner(userDao.findByUsername(userService.getCurrentUsername()));
-        taskDao.persist(task);
+
+        switch (repeatMode) {
+            case NORMAL -> {
+                taskDao.persist(task);
+            }
+            case EVERY_WEEK -> {
+                if (task.getDate() == null) {
+                    throw new TaskException("Enter start date");
+                }
+                taskDao.persist(task);
+                for (int i = 0; i < quantity - 1; i++) {
+                    task.setDate(task.getDate().plusWeeks(1));
+                    taskDao.persist(task);
+                }
+            }
+            case EVERYDAY -> {
+                if (task.getDate() == null) {
+                    throw new TaskException("Enter start date");
+                }
+                taskDao.persist(task);
+                for (int i = 0; i < quantity - 1; i++) {
+                    task.setDate(task.getDate().plusDays(1));
+                    taskDao.persist(task);
+                }
+            }
+        }
     }
 
     @Transactional

@@ -32,9 +32,11 @@ public class TaskController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+    public ResponseEntity<Task> createTask(@RequestBody Task task,
+                                           @RequestParam("repeatMode") RepeatMode repeatMode,
+                                           @RequestParam("quantity") Integer quantity) {
 
-        taskService.createTask(task);
+        taskService.createTask(task, repeatMode, quantity);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 
@@ -146,4 +148,5 @@ public class TaskController {
     public List<Task> getAllTasksByCategory(@PathVariable Long id) {
         return taskService.findAllByCategory(categoryService.find(id));
     }
+
 }

@@ -56,4 +56,8 @@ public class UserService{
         return dao.findByUsername(username);
     }
 
+    @Transactional
+    public void remove(String username) {
+        //TODO
+    }
 }
