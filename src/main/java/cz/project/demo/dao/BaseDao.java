@@ -1,5 +1,6 @@
 package cz.project.demo.dao;
 
+import cz.project.demo.model.Role;
 import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 
 import javax.persistence.EntityManager;
@@ -85,4 +86,5 @@ public abstract class BaseDao<T> implements GenericDao<T> {
     public boolean exists(Integer id) {
         return id != null && em.find(type, id) != null;
     }
+
 }

@@ -1,5 +1,7 @@
 package cz.project.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import cz.project.demo.exception.TaskException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,37 +23,56 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Basic(optional = false)
-    @Column
+
+    @Basic
+    @Column(nullable = false)
+    protected LocalDateTime created = LocalDateTime.now();
+    @Basic
+    @Column(nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     protected LocalDateTime date;
+
     @OneToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
     @OneToOne
     @JoinColumn(name = "performer_id")
     private User performer;
-    @Basic(optional = false)
+
+    @Basic
     @Column(nullable = false)
     private String name;
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     private String task;
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     private Integer price;
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     private boolean removed = false;
-    @Basic(optional = false)
+
+    @Basic
     @Column(nullable = false)
-    private boolean completed = false;
+    private boolean ownerApprovedCompletion = false;
+
+    @Basic
+    @Column(nullable = false)
+    private boolean performerApprovedCompletion = false;
 
     @Basic
     @Column
-    String review;
+    String performerReview;
     @Basic
     @Column
-    Integer stars;
+    String ownerReview;
+    @Basic
+    @Column
+    Integer performerStars;
+    @Basic
+    @Column
+    Integer ownerStars;
+
     @Basic
     @Column
     private Integer streetNumber;
@@ -70,20 +91,18 @@ public class Task {
     @Basic
     @Column
     private Integer postcode;
-    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
+
+    @OneToMany(cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<Comment>();
+
     @ManyToMany
     private List<Category> categories;
-    @Enumerated(EnumType.STRING)
-    private Status status;
 
-    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<AcceptanceMessage> acceptanceMessages;
 
-    public void setReview(String review, LocalDateTime date, Integer stars) {
-        this.review = review;
-        this.date = date;
-        this.stars = stars;
+    public void addAcceptanceMessage(AcceptanceMessage message){
+        acceptanceMessages.add(message);
     }
 
     public void addComment(Comment comment) {
@@ -98,4 +117,18 @@ public class Task {
         categories.remove(category);
     }
 
+
+    public void setPerformerStars(Integer performerStars) {
+        if(performerStars > 5 || performerStars < 0){
+            throw new TaskException("Can't rate <0 and >5");
+        }
+        this.performerStars = performerStars;
+    }
+
+    public void setOwnerStars(Integer ownerStars) {
+        if(ownerStars > 5 || ownerStars < 0){
+            throw new TaskException("Can't rate <0 and >5");
+        }
+        this.ownerStars = ownerStars;
+    }
 }

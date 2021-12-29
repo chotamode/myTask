@@ -42,6 +42,11 @@ public class CategoryService {
     }
 
     @Transactional
+    public void deleteCategory(Long id) {
+        categoryDao.remove(categoryDao.find(id));
+    }
+
+    @Transactional
     public void addTask(Category category, Task task) {
         Objects.requireNonNull(category);
         Objects.requireNonNull(task);

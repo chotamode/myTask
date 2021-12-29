@@ -32,8 +32,4 @@ public class TaskDao extends BaseDao<Task> {
         }
     }
 
-/*    public List<Task> findAll(Category category){
-        Objects.requireNonNull(category);
-        return em.createNamedQuery("Task.findByCategory", Task.class).setParameter("category", category).getResultList();
-    }*/
 }

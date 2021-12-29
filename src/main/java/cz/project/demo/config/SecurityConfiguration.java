@@ -2,7 +2,9 @@ package cz.project.demo.config;
 
 import cz.project.demo.service.UserService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,7 +20,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
 
     final UserService userService;
-
     final DataSource dataSource;
 
     public SecurityConfiguration(PasswordEncoder passwordEncoder, UserService userService, DataSource dataSource) {
@@ -33,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder)
                 .dataSource(dataSource)
                 .usersByUsernameQuery(
-                        "SELECT username, password, enabled FROM users WHERE username=?")
+                        "SELECT username, password, TRUE FROM users WHERE username=?")
                 .authoritiesByUsernameQuery(
                         "SELECT username, name FROM users JOIN users_role ON users.id = users_role.user_id JOIN role ON roles_id = role.id WHERE username=?");
     }
@@ -41,11 +42,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic()
-                .and()
+                .and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/user").hasRole("USER")
-                .antMatchers("/").permitAll()
+                .antMatchers("/**").hasRole("USER")
                 .and().formLogin();
     }
 

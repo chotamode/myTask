@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,6 +36,7 @@ public class MyTaskApplication {
         return args -> {
             User user1 = new User("name1", "surname1", "nickname1", "password1");
             User user2 = new User("name2", "surname2", "nickname2", "password2");
+            User user3 = new User("name3", "surname3", "nickname3", "password3");
             Role adminRole = new Role("ADMIN");
             Role userRole = new Role("USER");
             if(!roleService.exists(adminRole.getName())){
@@ -51,6 +53,10 @@ public class MyTaskApplication {
             if(!userService.exists(user2.getUsername())){
                 user2.addRole(userRole);
                 userService.persist(user2);
+            }
+            if(!userService.exists(user3.getUsername())){
+                user3.addRole(userRole);
+                userService.persist(user3);
             }
         };
     }

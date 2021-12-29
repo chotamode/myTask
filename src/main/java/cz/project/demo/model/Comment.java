@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -14,17 +15,21 @@ import java.util.Date;
 @Getter
 @Setter
 public class Comment {
-    @Basic(optional = false)
-    @Column(nullable = false)
-    String comment;
-    @Basic(optional = false)
-    @Column(nullable = false, name = "date")
-    @Temporal(TemporalType.TIMESTAMP)
-    Date date;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Basic
+    @Column(nullable = false)
+    String comment;
+    @Basic
+    @Column(nullable = false)
+    LocalDateTime date = LocalDateTime.now();
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "author_id")
     private User author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_id")
+    private Task task;
 }

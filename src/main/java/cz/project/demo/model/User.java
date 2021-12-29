@@ -1,5 +1,7 @@
 package cz.project.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,10 +19,8 @@ import java.util.*;
         @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :nickname"),
         @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
 })
-public class User implements UserDetails {
+public class User{
 
-    @OneToMany
-    List<Task> tasks = new ArrayList<Task>();
     @Id()
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -32,12 +32,13 @@ public class User implements UserDetails {
     @Column
     private String lastName;
 
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false, unique = true)
     private String username;
 
     @Basic(optional = false)
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Basic
@@ -61,20 +62,8 @@ public class User implements UserDetails {
 
     @ManyToMany
     @JoinColumn
+    @JsonIgnore
     private List<Role> roles;
-
-    @Basic
-    @Column
-    private boolean nonExpired;
-    @Basic
-    @Column
-    private boolean nonLocked;
-    @Basic
-    @Column
-    private boolean credentialsNonExpired;
-    @Basic
-    @Column
-    private boolean Enabled;
 
     public User() {
     }
@@ -85,20 +74,6 @@ public class User implements UserDetails {
         this.lastName = lastName;
         this.username = nickname;
         this.password = password;
-        this.nonExpired = true;
-        this.nonLocked = true;
-        this.credentialsNonExpired = true;
-        this.Enabled = true;
-    }
-
-    public void addTask(Task task) {
-        Objects.requireNonNull(task);
-        tasks.add(task);
-    }
-
-    public void removeTask(Task task) {
-        Objects.requireNonNull(task);
-        tasks.remove(task);
     }
 
     public void addRole(Role role) {
@@ -112,7 +87,6 @@ public class User implements UserDetails {
                 "(" + username + ")}";
     }
 
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<Authority> list = new ArrayList<>();
         for (Role g:
@@ -121,46 +95,5 @@ public class User implements UserDetails {
         }
         return list;
     }
-
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.nonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return this.nonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.Enabled;
-    }
-//    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//    private List<Address> address;
-    /*
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<Review> reviews;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<Comment> comments;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    List<AcceptanceMessage> acceptanceMessages;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    List<Message> messages;*/
-
-
-//    @OneToMany(mappedBy = "user_entity")
-//    private List<Comment> comments;
-
 
 }

@@ -4,35 +4,37 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Getter
 @Setter
+@NamedQueries({
+        @NamedQuery(name = "Message.findBySenderReceiver",
+                query = "SELECT m FROM Message m WHERE m.sender.username = :sender AND m.receiver.username = :receiver"),
+        @NamedQuery(name = "Message.findAll", query = "SELECT m FROM Message m WHERE m.receiver.username = :receiver")
+})
 public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
     private String content;
 
-    @Basic(optional = false)
+    @Basic
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date timestamp;
-
-    @Enumerated
-    private MessageStatus status;
+    private LocalDateTime timestamp = LocalDateTime.now();
 
 }
