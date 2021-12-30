@@ -58,6 +58,6 @@ public class UserService{
 
     @Transactional
     public void remove(String username) {
-        //TODO
+        dao.remove(findByUsername(username));
     }
 }

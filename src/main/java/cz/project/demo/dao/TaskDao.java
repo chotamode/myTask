@@ -15,6 +15,15 @@ public class TaskDao extends BaseDao<Task> {
         super(Task.class);
     }
 
+
+//    public List<Task> findAllTasksByUsername(User author) {
+//        try {
+//            return em.createNamedQuery("Task.findByCategory", Task.class).getResultList();
+//        } catch (NoResultException e) {
+//            return null;
+//        }
+//    }
+
     public List<Task> findAllByCategory(Category category) {
         try {
             return em.createNamedQuery("Task.findByCategory", Task.class).getResultList();
