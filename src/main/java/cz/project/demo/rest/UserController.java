@@ -32,7 +32,7 @@ public class UserController {
         return userService.findAll();
     }
 
-    @PreAuthorize("(!#user.isAdmin() && anonymous) || hasRole('ROLE_ADMIN')")
+    @PreAuthorize("(!user.isAdmin() && anonymous) || hasRole('ROLE_ADMIN')") //тут была решётка
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> register(@RequestBody User user) {
         userService.persist(user);

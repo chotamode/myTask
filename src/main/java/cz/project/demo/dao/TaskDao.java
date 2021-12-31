@@ -16,13 +16,6 @@ public class TaskDao extends BaseDao<Task> {
     }
 
 
-//    public List<Task> findAllTasksByUsername(User author) {
-//        try {
-//            return em.createNamedQuery("Task.findByCategory", Task.class).getResultList();
-//        } catch (NoResultException e) {
-//            return null;
-//        }
-//    }
 
     public List<Task> findAllByCategory(Category category) {
         try {
@@ -35,6 +28,15 @@ public class TaskDao extends BaseDao<Task> {
     public List<Task> findAllTasksByAuthor(User author) {
         try {
             return em.createNamedQuery("Task.findAllTasksByAuthor", Task.class).setParameter("owner", author)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public List<Task> findAllTasksWithoutAuthor(User author) {
+        try {
+            return em.createNamedQuery("Task.findAllTasksWithoutAuthor", Task.class).setParameter("owner", author)
                     .getResultList();
         } catch (NoResultException e) {
             return null;

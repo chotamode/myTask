@@ -37,6 +37,7 @@ public class MyTaskApplication {
             User user1 = new User("name1", "surname1", "nickname1", "password1");
             User user2 = new User("name2", "surname2", "nickname2", "password2");
             User user3 = new User("name3", "surname3", "nickname3", "password3");
+            User user4 = new User("name4", "surname4", "nickname4", "password4");
             Role adminRole = new Role("ADMIN");
             Role userRole = new Role("USER");
             if(!roleService.exists(adminRole.getName())){
@@ -57,6 +58,10 @@ public class MyTaskApplication {
             if(!userService.exists(user3.getUsername())){
                 user3.addRole(userRole);
                 userService.persist(user3);
+            }
+            if(!userService.exists(user4.getUsername())){
+                user4.addRole(adminRole);
+                userService.persist(user4);
             }
         };
     }

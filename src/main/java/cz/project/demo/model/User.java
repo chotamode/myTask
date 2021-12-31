@@ -80,6 +80,15 @@ public class User{
         this.roles.add(role);
     }
 
+    public boolean isAdmin(){
+        for (Role role: roles) {
+            if (role.toString().equals("ROLE_ADMIN")){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "User{" +

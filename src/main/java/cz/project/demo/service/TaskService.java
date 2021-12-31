@@ -65,7 +65,14 @@ public class TaskService {
 
     @Transactional
     public void deleteTask(Long id) {
-        taskDao.remove(taskDao.find(id));
+//        for (int i=0; i < userService.getCurrentUser().getRoles().size(); i++){
+            if (userService.getCurrentUser().isAdmin()) { //.getRoles().get(i).toString().equals("ROLE_ADMIN")
+                taskDao.remove(taskDao.find(id));
+            }
+//        }
+        if (taskDao.find(id).getOwner() == userService.getCurrentUser()){
+            taskDao.remove(taskDao.find(id));
+        }else throw new TaskException("you can't delete this task");
     }
 
     @Transactional
@@ -207,17 +214,14 @@ public class TaskService {
     }
 
     @Transactional
-    public List<Task> getAllOthersTasks(){
-
-        return taskDao.findAll()
-                .stream()
-                .filter(t -> !t.getOwner().getUsername().equals(userService.getCurrentUsername()))
-                .collect(Collectors.toList());
+    public List<Task>   getAllOthersTasks(){
+        return taskDao.findAllTasksWithoutAuthor(userService.getCurrentUser());
     }
 
 
     @Transactional
     public List<Task> getAllMyTasks(){
+
         return taskDao.findAllTasksByAuthor(userService.getCurrentUser());
     }
 
