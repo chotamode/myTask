@@ -1,6 +1,7 @@
 package cz.project.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cz.project.demo.exception.TaskException;
 import lombok.Getter;
 import lombok.Setter;
@@ -94,6 +95,7 @@ public class Task {
     @Column
     private Integer postcode;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<Comment>();
 

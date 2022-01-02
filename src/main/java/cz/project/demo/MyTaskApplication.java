@@ -60,6 +60,7 @@ public class MyTaskApplication {
                 userService.persist(user3);
             }
             if(!userService.exists(user4.getUsername())){
+                user4.addRole(userRole);
                 user4.addRole(adminRole);
                 userService.persist(user4);
             }

@@ -19,7 +19,7 @@ public class TaskDao extends BaseDao<Task> {
 
     public List<Task> findAllByCategory(Category category) {
         try {
-            return em.createNamedQuery("Task.findByCategory", Task.class).getResultList();
+            return em.createNamedQuery("Task.findByCategory", Task.class).setParameter("category", category).getResultList();
         } catch (NoResultException e) {
             return null;
         }

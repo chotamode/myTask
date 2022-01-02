@@ -47,11 +47,11 @@ public class CategoryService {
     }
 
     @Transactional
-    public void addTask(Category category, Task task) {
+    public void addTask(Category category, Long taskId) { //not sure
         Objects.requireNonNull(category);
-        Objects.requireNonNull(task);
-        task.addCategory(category);
-        taskDao.update(task);
+        Objects.requireNonNull(taskDao.find(taskId));
+        taskDao.find(taskId).addCategory(category);
+        taskDao.update(taskDao.find(taskId));
     }
 
     @Transactional

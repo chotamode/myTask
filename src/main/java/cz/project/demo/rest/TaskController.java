@@ -1,6 +1,7 @@
 package cz.project.demo.rest;
 
 import cz.project.demo.model.AcceptanceMessage;
+import cz.project.demo.model.Category;
 import cz.project.demo.model.Comment;
 import cz.project.demo.model.Task;
 import cz.project.demo.service.CategoryService;
@@ -25,12 +26,13 @@ public class TaskController {
 
     private final TaskService taskService;
     private final CommentService commentService;
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public TaskController(TaskService taskService, CommentService commentService) {
+    public TaskController(TaskService taskService, CommentService commentService, CategoryService categoryService) {
         this.taskService = taskService;
         this.commentService = commentService;
+        this.categoryService = categoryService;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -150,6 +152,22 @@ public class TaskController {
     @GetMapping(value = "/category/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Task> getAllTasksByCategory(@PathVariable Long id) {
         return taskService.findAllByCategory(categoryService.find(id));
+    }
+
+    @PostMapping(value = "/{id}/categories", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Task> addTaskToCategory(@PathVariable(value = "id") Long taskId, //NEED TO TEST
+                                                  @RequestBody Category category) {
+
+        categoryService.addTask(category, taskId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}/categories/{}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Task> deleteTaskFromCategory(@PathVariable(value = "id") Long taskId, //NEED TO TEST
+                                                  @RequestBody Category category) {
+
+        categoryService.addTask(category, taskId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

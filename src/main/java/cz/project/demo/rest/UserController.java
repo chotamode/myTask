@@ -1,5 +1,6 @@
 package cz.project.demo.rest;
 
+import cz.project.demo.model.Role;
 import cz.project.demo.model.User;
 import cz.project.demo.service.UserService;
 import org.slf4j.Logger;
@@ -46,5 +47,10 @@ public class UserController {
         userService.remove(username);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+//    @GetMapping(value = "/current_user",produces = MediaType.APPLICATION_JSON_VALUE)
+//    public List<Role> getCurrentUsers(){
+//        return userService.getCurrentUser().getRoles();
+//    }
 
 }
