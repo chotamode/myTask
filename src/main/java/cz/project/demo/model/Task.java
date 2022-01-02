@@ -1,6 +1,7 @@
 package cz.project.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cz.project.demo.exception.TaskException;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,8 @@ import java.util.List;
 
 @Entity
 @NamedQueries({
+        //@NamedQuery(name = "Task.findAllTasksWithoutAuthor", query = "SELECT t FROM Task t WHERE not (t.owner = :owner)"), //to do
+        @NamedQuery(name = "Task.findAllTasksWithoutAuthor", query = "SELECT t FROM Task t WHERE (t.owner <> :owner) AND t.performer IS NULL"), //AND (t.ownerApprovedCompletion <> true) AND (t.performerApprovedCompletion <> true)
         @NamedQuery(name = "Task.findAllTasksByAuthor", query = "SELECT t FROM Task t WHERE t.owner = :owner"),
         @NamedQuery(name = "Task.findByCategory", query = "SELECT t from Task t WHERE :category MEMBER OF t.categories AND NOT t.removed")
 })
@@ -92,6 +95,7 @@ public class Task {
     @Column
     private Integer postcode;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<Comment>();
 

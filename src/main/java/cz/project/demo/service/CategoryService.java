@@ -47,19 +47,19 @@ public class CategoryService {
     }
 
     @Transactional
-    public void addTask(Category category, Task task) {
+    public void addTask(Category category, Long taskId) { //not sure
         Objects.requireNonNull(category);
-        Objects.requireNonNull(task);
-        task.addCategory(category);
-        taskDao.update(task);
+        Objects.requireNonNull(taskDao.find(taskId));
+        taskDao.find(taskId).addCategory(category);
+        taskDao.update(taskDao.find(taskId));
     }
 
     @Transactional
-    public void removeTask(Category category, Task task) {
-        Objects.requireNonNull(category);
-        Objects.requireNonNull(task);
-        task.removeCategory(category);
-        taskDao.update(task);
+    public void removeTask(Long categoryId, Long taskId) { // need to be completed
+        Objects.requireNonNull(categoryDao.find(categoryId));
+        Objects.requireNonNull(taskDao.find(taskId));
+        taskDao.find(taskId).removeCategory(categoryDao.find(categoryId));
+        taskDao.update(taskDao.find(taskId));
     }
 
 }

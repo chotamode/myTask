@@ -11,11 +11,13 @@ import cz.project.demo.model.Category;
 import cz.project.demo.model.Task;
 import cz.project.demo.rest.RepeatMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.OrderBy;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -63,7 +65,14 @@ public class TaskService {
 
     @Transactional
     public void deleteTask(Long id) {
-        taskDao.remove(taskDao.find(id));
+//        for (int i=0; i < userService.getCurrentUser().getRoles().size(); i++){
+            if (userService.getCurrentUser().isAdmin()) { //.getRoles().get(i).toString().equals("ROLE_ADMIN")
+                taskDao.remove(taskDao.find(id));
+            }
+//        }
+        if (taskDao.find(id).getOwner() == userService.getCurrentUser()){
+            taskDao.remove(taskDao.find(id));
+        }else throw new TaskException("you can't delete this task");
     }
 
     @Transactional
@@ -131,33 +140,51 @@ public class TaskService {
 
     @Transactional
     public void createTask(Task task, RepeatMode repeatMode, Integer quantity){
-        task.setOwner(userDao.findByUsername(userService.getCurrentUsername()));
+        Task repeat_task = task;
+        if(repeatMode == RepeatMode.NORMAL && quantity != 1){
+            throw new TaskException("Bad value in quantity");
+        }
+        repeat_task.setOwner(userDao.findByUsername(userService.getCurrentUsername()));
 
         switch (repeatMode) {
             case NORMAL -> {
-                taskDao.persist(task);
+                taskDao.persist(repeat_task);
             }
-            case EVERY_WEEK -> {
-                if (task.getDate() == null) {
+            case EVERYWEEK -> {
+                if (repeat_task.getDate() == null) {
                     throw new TaskException("Enter start date");
                 }
-                taskDao.persist(task);
+                taskDao.persist(repeat_task);
                 for (int i = 0; i < quantity - 1; i++) {
-                    task.setDate(task.getDate().plusWeeks(1));
-                    taskDao.persist(task);
+                    repeat_task = build_repeat_task(repeat_task);
+                    repeat_task.setDate(repeat_task.getDate().plusWeeks(1));
+                    taskDao.persist(repeat_task);
                 }
+
             }
             case EVERYDAY -> {
-                if (task.getDate() == null) {
+                if (repeat_task.getDate() == null) {
                     throw new TaskException("Enter start date");
                 }
-                taskDao.persist(task);
+                taskDao.persist(repeat_task);
                 for (int i = 0; i < quantity - 1; i++) {
-                    task.setDate(task.getDate().plusDays(1));
-                    taskDao.persist(task);
+                    repeat_task = build_repeat_task(repeat_task);
+                    repeat_task.setDate(repeat_task.getDate().plusDays(1));
+                    taskDao.persist(repeat_task);
+
                 }
             }
         }
+    }
+
+    public Task build_repeat_task(Task task){
+        Task new_task = new Task();
+        new_task.setTask(task.getTask());
+        new_task.setDate(task.getDate());
+        new_task.setPrice(task.getPrice());
+        new_task.setName(task.getName());
+        new_task.setOwner(task.getOwner());
+        return new_task;
     }
 
     @Transactional
@@ -187,20 +214,15 @@ public class TaskService {
     }
 
     @Transactional
-    public List<Task> getAllOthersTasks(){
-
-        return taskDao.findAll()
-                .stream()
-                .filter(t -> !t.getOwner().getUsername().equals(userService.getCurrentUsername()))
-                .collect(Collectors.toList());
+    public List<Task>   getAllOthersTasks(){
+        return taskDao.findAllTasksWithoutAuthor(userService.getCurrentUser());
     }
+
 
     @Transactional
     public List<Task> getAllMyTasks(){
-        return taskDao.findAll()
-                .stream()
-                .filter(t -> t.getOwner().getUsername().equals(userService.getCurrentUsername()))
-                .collect(Collectors.toList());
+
+        return taskDao.findAllTasksByAuthor(userService.getCurrentUser());
     }
 
     @Transactional
