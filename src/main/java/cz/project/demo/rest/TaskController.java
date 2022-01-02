@@ -155,18 +155,18 @@ public class TaskController {
     }
 
     @PostMapping(value = "/{id}/categories", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Task> addTaskToCategory(@PathVariable(value = "id") Long taskId, //NEED TO TEST
+    public ResponseEntity<Task> addTaskToCategory(@PathVariable(value = "id") Long taskId,
                                                   @RequestBody Category category) {
 
         categoryService.addTask(category, taskId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{id}/categories/{}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Task> deleteTaskFromCategory(@PathVariable(value = "id") Long taskId, //NEED TO TEST
-                                                  @RequestBody Category category) {
+    @DeleteMapping(value = "/{id}/categories/{category_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Task> deleteTaskFromCategory(@PathVariable(value = "id") Long taskId,
+                                                  @PathVariable(value = "category_id") Long categoryId) {
 
-        categoryService.addTask(category, taskId);
+        categoryService.removeTask(categoryId, taskId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

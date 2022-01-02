@@ -55,11 +55,11 @@ public class CategoryService {
     }
 
     @Transactional
-    public void removeTask(Category category, Task task) {
-        Objects.requireNonNull(category);
-        Objects.requireNonNull(task);
-        task.removeCategory(category);
-        taskDao.update(task);
+    public void removeTask(Long categoryId, Long taskId) { // need to be completed
+        Objects.requireNonNull(categoryDao.find(categoryId));
+        Objects.requireNonNull(taskDao.find(taskId));
+        taskDao.find(taskId).removeCategory(categoryDao.find(categoryId));
+        taskDao.update(taskDao.find(taskId));
     }
 
 }
