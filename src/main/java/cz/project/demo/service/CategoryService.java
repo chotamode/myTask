@@ -3,6 +3,7 @@ package cz.project.demo.service;
 
 import cz.project.demo.dao.CategoryDao;
 import cz.project.demo.dao.TaskDao;
+import cz.project.demo.exception.TaskException;
 import cz.project.demo.model.Category;
 import cz.project.demo.model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ public class CategoryService {
     private final CategoryDao categoryDao;
 
     private final TaskDao taskDao;
+    private UserService userService;
 
     @Autowired
     public CategoryService(CategoryDao categoryDao, TaskDao taskDao) {
@@ -47,7 +49,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void addTask(Category category, Long taskId) { //not sure
+    public void addTask(Category category, Long taskId) {
         Objects.requireNonNull(category);
         Objects.requireNonNull(taskDao.find(taskId));
         taskDao.find(taskId).addCategory(category);
@@ -55,7 +57,10 @@ public class CategoryService {
     }
 
     @Transactional
-    public void removeTask(Long categoryId, Long taskId) { // need to be completed
+    public void removeTask(Long categoryId, Long taskId) {
+        if (taskDao.find(taskId).getOwner() != userService.getCurrentUser() || !userService.getCurrentUser().isAdmin()){
+            throw new TaskException("you cant delete this task");
+        }
         Objects.requireNonNull(categoryDao.find(categoryId));
         Objects.requireNonNull(taskDao.find(taskId));
         taskDao.find(taskId).removeCategory(categoryDao.find(categoryId));

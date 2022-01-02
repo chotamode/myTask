@@ -156,7 +156,7 @@ public class TaskService {
                 }
                 taskDao.persist(repeat_task);
                 for (int i = 0; i < quantity - 1; i++) {
-                    repeat_task = build_repeat_task(repeat_task);
+                    repeat_task = new Task(repeat_task);
                     repeat_task.setDate(repeat_task.getDate().plusWeeks(1));
                     taskDao.persist(repeat_task);
                 }
@@ -168,23 +168,13 @@ public class TaskService {
                 }
                 taskDao.persist(repeat_task);
                 for (int i = 0; i < quantity - 1; i++) {
-                    repeat_task = build_repeat_task(repeat_task);
+                    repeat_task = new Task(repeat_task);
                     repeat_task.setDate(repeat_task.getDate().plusDays(1));
                     taskDao.persist(repeat_task);
 
                 }
             }
         }
-    }
-
-    public Task build_repeat_task(Task task){
-        Task new_task = new Task();
-        new_task.setTask(task.getTask());
-        new_task.setDate(task.getDate());
-        new_task.setPrice(task.getPrice());
-        new_task.setName(task.getName());
-        new_task.setOwner(task.getOwner());
-        return new_task;
     }
 
     @Transactional

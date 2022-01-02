@@ -27,6 +27,25 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public Task() {
+    }
+
+    public Task(Task task) {
+        this.created = task.created;
+        this.owner = task.owner;
+        this.name = task.name;
+        this.task = task.task;
+        this.price = task.price;
+        this.removed = task.removed;
+        this.streetNumber = task.streetNumber;
+        this.streetName = task.streetName;
+        this.suburb = task.suburb;
+        this.city = task.city;
+        this.state = task.state;
+        this.postcode = task.postcode;
+        this.categories = task.categories;
+    }
+
     @Basic
     @Column(nullable = false)
     protected LocalDateTime created = LocalDateTime.now();
