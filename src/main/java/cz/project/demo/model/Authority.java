@@ -16,8 +16,7 @@ public class Authority implements GrantedAuthority {
     @Id
     private String id;
 
-    @Basic
-    @Column(unique = true)
+    @Id
     private String name;
 
     public Authority(String name) {
